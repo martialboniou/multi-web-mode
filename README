@@ -1,13 +1,13 @@
-This package contains multi-web-mode.
+This package contains a fork of multi-web-mode.
 
 0. Info
 
    Author: Fabián Ezequiel Gallina
-   Contact: fabian at gnu dot org dot ar
+   Maintainer: Martial Boniou
+   Contact: <hondana@gmx.com>
    Project homepage: http://github.com/fgallina/multi-web-mode
    Wiki: http://github.com/fgallina/multi-web-mode/wikis
-   My Blog: http://www.from-the-cloud.com
-   Downloads page: http://github.com/fgallina/multi-web-mode/downloads
+   Downloads page: http://github.com/martialboniou/multi-web-mode
 
 1. Introduction
 
@@ -34,6 +34,8 @@ This package contains multi-web-mode.
    0.2.1. It is still available from here:
 
       * http://github.com/fgallina/multi-web-mode/tree/0.2.1
+
+   This version is not the official release.
 
 2. Requirements
 

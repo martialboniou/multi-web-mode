@@ -1,0 +1,8 @@
+2011-10-27  Martial Boniou  <Martial.Boniou@gmx.com>
+
+	* mweb-example-config.el ("linum"): append default mode and `mweb-tags'
+	modes in `linum' context.
+
+	* multi-web-mode.el: first fork to add `viper' support; enable state
+	persistency during major mode changes.
+

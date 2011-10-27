@@ -1,9 +1,11 @@
 ;;; multi-web-mode.el --- multiple major mode support for web editing
 
 ;; Copyright (C) 2009 Fabián Ezequiel Gallina.
+;;               2011 Martial Boniou
 
 ;; Author: Fabián Ezequiel Gallina <fabian@gnu.org.ar>
-;; Maintainer: Fabián Ezequiel Gallina <fabian@gnu.org.ar>
+;; Maintainer: Martial Boniou <hondana@gmx.com>
+;;             Fabián Ezequiel Gallina <fabian@gnu.org.ar>
 ;; Keywords: convenience, languages, wp
 
 ;; This file is part of Multi Web Mode
@@ -154,8 +156,17 @@ returns a symbol with its name."
           (setq closest-chunk-point result)
           (setq closest-chunk-mode (mweb-get-tag-attr tag 'mode)))))
     (when (not (equal closest-chunk-mode major-mode))
-      (funcall closest-chunk-mode)
+      (mweb-call closest-chunk-mode)
       closest-chunk-mode)))
+
+(defun mweb-call (mode)
+  (let ((vs (when (boundp 'viper-current-state) viper-current-state)))
+    (funcall mode)
+    (when vs
+      (cond ((eq vs 'insert-state) (viper-change-state-to-insert))
+            ((eq vs 'vi-state)     (viper-change-state-to-vi))
+            ((eq vs 'emacs-state)  (viper-change-state-to-emacs))
+            (t                     (viper-change-state vs))))))
 
 (defun mweb-change-indent-line-function ()
   "Sets the correct value for `indent-line-function' and
@@ -189,10 +200,10 @@ found then it returns nil."
       (beginning-of-buffer)
       (re-search-forward "[^\s\t\n]" nil t)
       (or (not (mweb-looking-at-open-tag-p))
-	  (catch 'break
-	    (dolist (tag mweb-tags)
-	      (when (re-search-forward (mweb-get-tag-attr tag 'close) nil t)
-		(throw 'break (not (not (re-search-forward "[^\s\t\n]" nil t)))))))))))
+      (catch 'break
+        (dolist (tag mweb-tags)
+          (when (re-search-forward (mweb-get-tag-attr tag 'close) nil t)
+        (throw 'break (not (not (re-search-forward "[^\s\t\n]" nil t)))))))))))
 
 (defun mweb-update-context ()
   "This function takes care of updating the extra indentation for
@@ -230,7 +241,7 @@ previous submode."
           (beginning-of-line)
           (delete-region (point-marker) eol)
           (delete-backward-char 1)))
-      (funcall changed-major-mode)
+      (mweb-call changed-major-mode)
       (set-buffer-modified-p buffer-modified-flag)
       indentation)))
 
@@ -255,9 +266,9 @@ previous submode."
             (save-excursion
               (beginning-of-line)
               (delete-horizontal-space)
-	      (unless (bobp)
-		(indent-according-to-mode)
-		(indent-to (+ mweb-extra-indentation mweb-submode-indent-offset)))))
+          (unless (bobp)
+        (indent-according-to-mode)
+        (indent-to (+ mweb-extra-indentation mweb-submode-indent-offset)))))
         ;; Close tag indentation routine
         (let ((open-tag-indentation 0))
           (save-excursion
@@ -296,9 +307,9 @@ which are not for the default major mode."
       (or (bolp) (forward-line 1))
       (while (< (point) end)
         (mweb-update-context)
-	(if (equal major-mode mweb-default-major-mode)
-	    (indent-according-to-mode)
-	  (mweb-indent-line))
+    (if (equal major-mode mweb-default-major-mode)
+        (indent-according-to-mode)
+      (mweb-indent-line))
         (forward-line 1))
       (move-marker end nil))))
 
