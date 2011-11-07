@@ -36,6 +36,8 @@
 
 ;;; Code:
 
+(require 'eval-after-load)
+
 (defvar mweb-mode-map
   (let ((mweb-mode-map (make-sparse-keymap)))
     (define-key mweb-mode-map (kbd "M-<f11>") 'mweb-set-default-major-mode)
